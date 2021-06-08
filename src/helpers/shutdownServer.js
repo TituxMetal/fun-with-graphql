@@ -1,7 +1,6 @@
-const shutdownServer = server => {
+const shutdownServer = () => {
   const exitHandler = async signal => {
     try {
-      await server.close()
       console.info(
         `Got ${signal}. Graceful shutdown. Server successfully closed`
       )
