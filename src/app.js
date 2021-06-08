@@ -1,30 +1,23 @@
 import 'express-async-errors'
-import express from 'express'
+import { GraphQLServer } from 'graphql-yoga'
 
 import { port } from '#root/config'
-import { errorHandler } from '#root/middlewares'
 import { mainRoutes } from '#root/routes'
 
-const createApp = () => {
-  const app = express()
+const createApp = (typeDefs, resolvers) => {
+  const server = new GraphQLServer({ typeDefs, resolvers })
+  const options = {
+    port,
+    endpoint: '/',
+    subscriptions: '/',
+    playground: '/graphql'
+  }
 
-  app.use(express.json())
-
-  app.use('/', mainRoutes)
-
-  app.all('*', async (req, res, next) => {
-    const error = `${req.path} page does not exists`
-
-    res.status(404).json({ message: error })
-
-    return next()
-  })
-
-  app.use(errorHandler)
-
-  const server = app.listen(port, '0.0.0.0', () =>
+  server.start(options, () =>
     console.info(`Server is listening on http://localhost:${port}`)
   )
+
+  server.express.use('/', mainRoutes)
 
   return server
 }
