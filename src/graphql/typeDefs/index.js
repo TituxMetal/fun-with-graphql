@@ -1,5 +1,6 @@
 const typeDefs = `
   type Query {
+    greeting(name: String, position: String): String!
     me: User!
     post: Post!
   }
