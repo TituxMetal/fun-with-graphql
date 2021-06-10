@@ -1,5 +1,12 @@
 const resolvers = {
   Query: {
+    greeting: (_parent, args) => {
+      const { name, position } = args
+
+      return name && position
+        ? `Hello ${name}! You are my favorite ${position}!`
+        : 'Hello!'
+    },
     me: () => ({
       id: 'abc123',
       name: 'Titux',
