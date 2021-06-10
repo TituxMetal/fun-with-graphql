@@ -1,23 +1,26 @@
 import 'express-async-errors'
-import { GraphQLServer } from 'graphql-yoga'
+import express from 'express'
+import { graphqlHTTP } from 'express-graphql'
+import expressPlayground from 'graphql-playground-middleware-express'
 
 import { port } from '#root/config'
 import { mainRoutes } from '#root/routes'
 
-const createApp = (typeDefs, resolvers) => {
-  const server = new GraphQLServer({ typeDefs, resolvers })
-  const options = {
-    port,
-    endpoint: '/',
-    subscriptions: '/',
-    playground: '/graphql'
-  }
+const createApp = graphQLSchema => {
+  const app = express()
 
-  server.start(options, () =>
-    console.info(`Server is listening on http://localhost:${port}`)
+  app.use('/', mainRoutes)
+  app.get('/graphql', expressPlayground({ endpoint: '/graphql' }))
+  app.use(
+    graphqlHTTP({
+      schema: graphQLSchema,
+      graphiql: false
+    })
   )
 
-  server.express.use('/', mainRoutes)
+  const server = app.listen(port, () =>
+    console.info(`Server is listening on http://localhost:${port}`)
+  )
 
   return server
 }
