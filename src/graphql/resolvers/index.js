@@ -1,12 +1,10 @@
+import { getAllAndPopulate, getByKey } from '#root/collections'
+
 const resolvers = {
   Query: {
-    greeting: (_parent, args) => {
-      const { name, position } = args
-
-      return name && position
-        ? `Hello ${name}! You are my favorite ${position}!`
-        : 'Hello!'
-    },
+    posts: async (_parent, _args, _context, _info) =>
+      getAllAndPopulate('posts', 'author', 'users'),
+    users: async (_parent, _args, _context, _info) => getByKey('users'),
     me: () => ({
       id: 'abc123',
       name: 'Titux',
@@ -21,4 +19,5 @@ const resolvers = {
     })
   }
 }
+
 export default resolvers
