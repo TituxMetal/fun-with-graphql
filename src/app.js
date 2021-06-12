@@ -9,6 +9,7 @@ import { mainRoutes } from '#root/routes'
 const createApp = graphQLSchema => {
   const app = express()
 
+  app.use(express.json())
   app.use('/', mainRoutes)
   app.get('/graphql', expressPlayground({ endpoint: '/graphql' }))
   app.use(
