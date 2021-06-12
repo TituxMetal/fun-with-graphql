@@ -1,6 +1,7 @@
 const typeDefs = `
   type Query {
-    greeting(name: String, position: String): String!
+    posts: [Post!]!
+    users: [User!]!
     me: User!
     post: Post!
   }
@@ -10,6 +11,7 @@ const typeDefs = `
     title: String!
     body: String!
     published: Boolean!
+    author: User!
   }
 
   type User {
